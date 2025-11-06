@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BattleCore Arena</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="arena">
+      <header class="arena__header">
+        <h1>BattleCore Arena</h1>
+        <p class="arena__subtitle">Select a skill with keys 0-9 to strike your foe.</p>
+      </header>
+
+      <section class="combatants">
+        <article class="combatant" id="player">
+          <h2 class="combatant__name">Player</h2>
+          <div class="combatant__bars">
+            <div class="bar">
+              <span class="bar__label">HP</span>
+              <div class="bar__track">
+                <div class="bar__value" data-type="hp"></div>
+              </div>
+              <span class="bar__stat" data-type="hp">100 / 100</span>
+            </div>
+            <div class="bar">
+              <span class="bar__label">Energy</span>
+              <div class="bar__track">
+                <div class="bar__value bar__value--energy" data-type="energy"></div>
+              </div>
+              <span class="bar__stat" data-type="energy">50 / 50</span>
+            </div>
+          </div>
+          <ul class="status-list" aria-label="Player status effects"></ul>
+        </article>
+
+        <article class="combatant" id="enemy">
+          <h2 class="combatant__name">Synth Warden</h2>
+          <div class="combatant__bars">
+            <div class="bar">
+              <span class="bar__label">HP</span>
+              <div class="bar__track">
+                <div class="bar__value" data-type="hp"></div>
+              </div>
+              <span class="bar__stat" data-type="hp">100 / 100</span>
+            </div>
+            <div class="bar">
+              <span class="bar__label">Energy</span>
+              <div class="bar__track">
+                <div class="bar__value bar__value--energy" data-type="energy"></div>
+              </div>
+              <span class="bar__stat" data-type="energy">50 / 50</span>
+            </div>
+          </div>
+          <ul class="status-list" aria-label="Enemy status effects"></ul>
+        </article>
+      </section>
+
+      <section class="skills" aria-label="Player skills">
+        <h2 class="skills__title">Skills</h2>
+        <div class="skills__grid" id="skill-grid"></div>
+      </section>
+
+      <section class="log" aria-live="polite">
+        <h2 class="log__title">Combat Log</h2>
+        <div class="log__entries" id="log"></div>
+      </section>
+
+      <dialog class="result" id="result-dialog">
+        <h2 id="result-title"></h2>
+        <p id="result-body"></p>
+        <button id="restart-btn">Restart Battle</button>
+      </dialog>
+    </main>
+
+    <script src="game.js" type="module"></script>
+  </body>
+</html>
