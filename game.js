@@ -77,6 +77,8 @@ const gameState = {
   turnCount: 1
 };
 
+let pendingEnemyTurn = null;
+
 function createEntity(name, maxHp, maxEnergy, skillIds) {
   return {
     name,
@@ -188,7 +190,10 @@ function handleSkillInput(key) {
   executeSkill(gameState.activeEntity, gameState.waitingEntity, skill);
   endTurn();
   if (!checkForWinner()) {
-    setTimeout(enemyTurn, 650);
+    pendingEnemyTurn = setTimeout(() => {
+      pendingEnemyTurn = null;
+      enemyTurn();
+    }, 650);
   }
 }
 
@@ -378,12 +383,12 @@ function hideResult() {
 }
 
 function restartBattle() {
-  [player, enemy].forEach((entity) => {
-    entity.hp = entity.maxHp;
-    entity.energy = entity.maxEnergy;
-    entity.cooldowns = {};
-    entity.statuses = [];
-  });
+  if (pendingEnemyTurn) {
+    clearTimeout(pendingEnemyTurn);
+    pendingEnemyTurn = null;
+  }
+
+  [player, enemy].forEach(resetEntityState);
   gameState.activeEntity = player;
   gameState.waitingEntity = enemy;
   gameState.lockInput = false;
@@ -392,6 +397,13 @@ function restartBattle() {
   ui.log.innerHTML = "";
   logEvent("A new duel begins in the BattleCore Arena!");
   render();
+}
+
+function resetEntityState(entity) {
+  entity.hp = entity.maxHp;
+  entity.energy = entity.maxEnergy;
+  Object.keys(entity.cooldowns).forEach((key) => delete entity.cooldowns[key]);
+  entity.statuses.length = 0;
 }
 
 function handleKeydown(event) {
