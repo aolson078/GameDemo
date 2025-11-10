@@ -67,7 +67,8 @@ const ui = {
   resultBody: document.getElementById("result-body"),
   restartBtn: document.getElementById("restart-btn"),
   playerPanel: document.getElementById("player"),
-  enemyPanel: document.getElementById("enemy")
+  enemyPanel: document.getElementById("enemy"),
+  turnIndicator: document.getElementById("turn-indicator")
 };
 
 const gameState = {
@@ -112,6 +113,7 @@ function render() {
   renderEntity(ui.playerPanel, player);
   renderEntity(ui.enemyPanel, enemy);
   renderSkillGrid();
+  updateTurnState();
 }
 
 function renderEntity(panel, entity) {
@@ -137,6 +139,20 @@ function renderEntity(panel, entity) {
     chip.textContent = `${status.name.toUpperCase()} (${status.duration})`;
     statusList.appendChild(chip);
   });
+}
+
+function updateTurnState() {
+  ui.playerPanel.classList.toggle("combatant--active", gameState.activeEntity === player);
+  ui.enemyPanel.classList.toggle("combatant--active", gameState.activeEntity === enemy);
+
+  if (!ui.turnIndicator) return;
+  const isPlayerTurn = gameState.activeEntity === player;
+  const icon = isPlayerTurn ? "⚔️" : "🤖";
+  const label = isPlayerTurn ? "Player Turn" : `${gameState.activeEntity.name} Turn`;
+
+  ui.turnIndicator.innerHTML = `<span>${icon}</span><span>${label}</span>`;
+  ui.turnIndicator.classList.toggle("turn-banner--player", isPlayerTurn);
+  ui.turnIndicator.classList.toggle("turn-banner--enemy", !isPlayerTurn);
 }
 
 function renderSkillGrid() {
